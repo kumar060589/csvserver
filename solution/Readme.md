@@ -76,8 +76,45 @@ To know which port the application is listening
 [root@6729cbf77b0f csvserver]# netstat -tulpn | grep LISTEN
 tcp6       0      0 :::9300                 :::*                    LISTEN      1/csvserver
 
+To change the default port for the application to 9393:
+docker run -d -v /root/solution/inputFile:/csvserver/inputdata -p 80:9393 infracloudio/csvserver:latest
+
+For stopping the container use the below command :
+docker stop 6729cbf77b0f
+
+Part 2:
+
+For removing/deleting container :
+docker rm 6729cbf77b0f
+
+Create a docker-compose.yaml file for the setup from part I.
+vi docker-compose.yaml
+
+version: "3"
+services:
+   mycsvserver:
+     image: infracloudio/csvserver:latest
+     container_name: csvserver_container
+     ports:
+       - 80:9393
+     volumes:
+       - /root/solution/inputFile:/csvserver/inputdata
+
+As port 9393 is already allocated we are getting the below output :
+Creating network "solution_default" with the default driver
+Creating csvserver_container ...
+Creating csvserver_container ... error
+
+ERROR: for csvserver_container  Cannot start service mycsvserver: driver failed programming external connectivity on endpoint csvserver_container (4b5985dad2e527370a091e1f0fbb1d3a93ac4736474ed30270e8204add8dcef2): Bind for 0.0.0.0:80 failed: port is already allocated
 
 
+So we would try allocating a different port 9001and the local port to 8001 - changing the port section in docker-compose.yaml
+ports:
+       - 8001:9001
 
-
-
+[root@ip-172-31-4-187 solution]# docker-compose up
+Removing csvserver_container
+Recreating 0fbe0137e337_csvserver_container ... done
+Attaching to csvserver_container
+csvserver_container | 2021/06/14 04:57:47 listening on ****
+ So this creates a new container.
