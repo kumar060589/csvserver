@@ -1,0 +1,9 @@
+version: "3"
+services:
+   mycsvserver:
+     image: infracloudio/csvserver:latest
+     container_name: csvserver_container
+     ports:
+       - 8001:9001
+     volumes:
+       - /root/solution/inputFile:/csvserver/inputdata
